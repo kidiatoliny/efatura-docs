@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://efatura.akira-io.com/sitemap-index.xml

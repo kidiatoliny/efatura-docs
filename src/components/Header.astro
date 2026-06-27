@@ -1,0 +1,43 @@
+---
+import logo from '@/assets/logo.svg';
+import { Search } from '@/components/Search';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { MobileNav } from '@/components/MobileNav';
+import type { NavGroup } from '@/lib/nav';
+
+interface Props {
+  nav: NavGroup[];
+  currentSlug?: string;
+}
+
+const { nav, currentSlug = '' } = Astro.props;
+---
+
+<header class="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
+  <div class="flex h-14 items-center gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
+    <MobileNav client:load nav={nav} currentSlug={currentSlug} />
+
+    <a href="/" class="flex min-w-0 shrink items-center gap-2 sm:gap-2.5">
+      <img src={logo.src} alt="efatura" width="30" height="30" class="shrink-0 rounded-lg" />
+      <span class="truncate text-[16px] font-bold tracking-tight sm:text-[17px]">efatura</span>
+      <span
+        class="hidden rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent-foreground sm:inline-flex"
+      >
+        Docs
+      </span>
+    </a>
+
+    <div class="ml-auto flex shrink-0 items-center justify-end gap-1.5">
+      <Search client:load />
+
+      <ThemeToggle client:load />
+
+      <span
+        class="ml-1 hidden items-center gap-1.5 rounded-full border border-border bg-muted/50 px-3 py-1 text-xs font-medium text-muted-foreground md:inline-flex"
+      >
+        <span class="size-1.5 rounded-full bg-primary"></span>
+        Beta
+      </span>
+    </div>
+  </div>
+</header>

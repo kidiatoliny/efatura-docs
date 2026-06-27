@@ -1,0 +1,48 @@
+---
+title: "Packaging"
+description: "DFE transmission uses ZIP files containing compact XML documents. The implementation lives in src/application/packaging because packaging is an application..."
+sidebar:
+  order: 7
+---
+
+DFE transmission uses ZIP files containing compact XML documents. The implementation lives in `src/application/packaging` because packaging is an application use case, not a core contract and not a presentation adapter.
+
+## Files
+
+```text
+src/application/packaging/
+  crc32.ts      CRC32 calculation for ZIP records
+  dfe-zip.ts    Deflate ZIP writer for DFE XML files
+```
+
+## ZIP Rules
+
+`buildDfeZip()` accepts a list of DFE XML files:
+
+```ts
+const zip = efatura.buildDfeZip([
+  { iud, xml },
+]);
+```
+
+Each XML file is written into the archive as `{IUD}.xml`, using Deflate compression. The helper validates IUDs before writing filenames.
+
+## Transport Split
+
+Packaging is separate from transport:
+
+- `buildDfeZip()` only creates the ZIP payload.
+- `MiddlewareTransport` submits ZIP payloads to a local middleware instance.
+- `PlatformTransport` submits ZIP payloads to the official PE API using OAuth bearer tokens and repository headers.
+
+This split keeps packaging deterministic and easy to test with internal package fixtures. Official DNRE golden vectors for ZIP payloads were not found in the published artifacts.
+
+## Responses
+
+Fetch-based middleware and platform transports normalize JSON and XML service responses into:
+
+- `requestId`, `correlationId`, and `receivedAt`, when the response carries envelope metadata.
+- `documents`: DFE-level results such as IUD, status, code, message, repository code, authorization code, validation code, processing timestamp, and raw payload.
+- `errors`: service or validation errors with code, message, field, severity, details, and raw payload.
+
+If the HTTP response fails without a structured error body, the transport records the HTTP status as a submission error.
