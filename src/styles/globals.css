@@ -29,6 +29,7 @@
   --sidebar-accent: #f1ecfe;
   --sidebar-accent-foreground: #5b21b6;
   --sidebar-border: #e7e7f0;
+  --code-string: #15803d;
 }
 
 .dark {
@@ -55,6 +56,7 @@
   --sidebar-accent: #1c1733;
   --sidebar-accent-foreground: #cdbffc;
   --sidebar-border: #20202b;
+  --code-string: #86efac;
 }
 
 @theme inline {
