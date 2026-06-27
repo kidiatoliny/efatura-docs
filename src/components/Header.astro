@@ -13,7 +13,7 @@ interface Props {
 const { nav, currentSlug = '' } = Astro.props;
 ---
 
-<header class="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
+<header class="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-md">
   <div class="flex h-14 items-center gap-2 px-3 sm:h-16 sm:gap-3 sm:px-6">
     <MobileNav client:load nav={nav} currentSlug={currentSlug} />
 
@@ -38,6 +38,17 @@ const { nav, currentSlug = '' } = Astro.props;
         <span class="size-1.5 rounded-full bg-primary"></span>
         Beta
       </span>
+    </div>
+  </div>
+  <div class="border-t border-border/70 bg-accent/60 px-3 py-2 sm:px-6">
+    <div class="mx-auto flex max-w-[90rem] items-start gap-2 text-xs leading-5 text-muted-foreground sm:items-center sm:text-sm">
+      <span class="inline-flex shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+        Beta
+      </span>
+      <p>
+        <span class="font-medium text-foreground">Beta documentation.</span> APIs may change before
+        the stable release.
+      </p>
     </div>
   </div>
 </header>
