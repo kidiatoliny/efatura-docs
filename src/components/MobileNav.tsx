@@ -1,8 +1,46 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import type { NavGroup } from '@/lib/nav';
+import type { NavGroup, NavItem } from '@/lib/nav';
 import { cn } from '@/lib/utils';
+
+function hasActiveItem(item: NavItem, currentSlug: string): boolean {
+  return item.id === currentSlug || Boolean(item.items?.some((child) => hasActiveItem(child, currentSlug)));
+}
+
+function MobileNavItems({ items, currentSlug, depth = 0 }: { items: NavItem[]; currentSlug: string; depth?: number }) {
+  return (
+    <ul className={cn('flex flex-col gap-0.5', depth > 0 && 'ml-3 border-l border-sidebar-border pl-3')}>
+      {items.map((item) => (
+        <li key={item.id}>
+          {item.items?.length ? (
+            <>
+              <p
+                className={cn(
+                  'rounded-md px-2 py-1.5 text-sm font-medium text-sidebar-foreground',
+                  hasActiveItem(item, currentSlug) && 'text-sidebar-accent-foreground',
+                )}
+              >
+                {item.title}
+              </p>
+              <MobileNavItems items={item.items} currentSlug={currentSlug} depth={depth + 1} />
+            </>
+          ) : (
+            <a
+              href={item.href}
+              className={cn(
+                'block rounded-md px-2 py-1.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                item.id === currentSlug && 'bg-sidebar-accent font-medium text-sidebar-accent-foreground',
+              )}
+            >
+              {item.title}
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export function MobileNav({ nav, currentSlug }: { nav: NavGroup[]; currentSlug: string }) {
   const [open, setOpen] = useState(false);
@@ -31,21 +69,7 @@ export function MobileNav({ nav, currentSlug }: { nav: NavGroup[]; currentSlug: 
                 <p className="mb-1.5 px-2 text-xs font-bold uppercase tracking-wider text-foreground">
                   {group.label}
                 </p>
-                <ul className="flex flex-col gap-0.5">
-                  {group.items.map((item) => (
-                    <li key={item.id}>
-                      <a
-                        href={item.href}
-                        className={cn(
-                          'block rounded-md px-2 py-1.5 text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-                          item.id === currentSlug && 'bg-sidebar-accent font-medium text-sidebar-accent-foreground',
-                        )}
-                      >
-                        {item.title}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                <MobileNavItems items={group.items} currentSlug={currentSlug} />
               </div>
             ))}
           </nav>

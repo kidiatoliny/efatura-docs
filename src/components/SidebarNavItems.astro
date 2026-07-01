@@ -1,0 +1,49 @@
+---
+import { cn } from '@/lib/utils';
+import type { NavItem } from '@/lib/nav';
+
+interface Props {
+  items: NavItem[];
+  currentSlug: string;
+  depth?: number;
+}
+
+const { items, currentSlug, depth = 0 } = Astro.props;
+
+function hasActiveItem(item: NavItem): boolean {
+  return item.id === currentSlug || Boolean(item.items?.some(hasActiveItem));
+}
+---
+
+<ul class={cn('flex flex-col gap-0.5', depth > 0 && 'ml-3 border-l border-sidebar-border pl-3')}>
+  {
+    items.map((item) => (
+      <li>
+        {item.items?.length ? (
+          <>
+            <p
+              class={cn(
+                'rounded-md px-2 py-1.5 text-sm font-medium text-sidebar-foreground',
+                hasActiveItem(item) && 'text-sidebar-accent-foreground',
+              )}
+            >
+              {item.title}
+            </p>
+            <Astro.self items={item.items} currentSlug={currentSlug} depth={depth + 1} />
+          </>
+        ) : (
+          <a
+            href={item.href}
+            class={cn(
+              'block rounded-md px-2 py-1.5 text-sm text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+              item.id === currentSlug &&
+                'bg-sidebar-accent font-medium text-sidebar-accent-foreground',
+            )}
+          >
+            {item.title}
+          </a>
+        )}
+      </li>
+    ))
+  }
+</ul>

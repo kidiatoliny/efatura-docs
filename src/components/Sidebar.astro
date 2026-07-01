@@ -1,6 +1,6 @@
 ---
-import { cn } from '@/lib/utils';
 import type { NavGroup } from '@/lib/nav';
+import SidebarNavItems from '@/components/SidebarNavItems.astro';
 
 interface Props {
   nav: NavGroup[];
@@ -20,22 +20,7 @@ const { nav, currentSlug } = Astro.props;
           <p class="mb-2 px-2 text-xs font-bold uppercase tracking-wider text-foreground">
             {group.label}
           </p>
-          <ul class="flex flex-col gap-0.5">
-            {group.items.map((item) => (
-              <li>
-                <a
-                  href={item.href}
-                  class={cn(
-                    'block rounded-md px-2 py-1.5 text-sm text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-                    item.id === currentSlug &&
-                      'bg-sidebar-accent font-medium text-sidebar-accent-foreground',
-                  )}
-                >
-                  {item.title}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <SidebarNavItems items={group.items} currentSlug={currentSlug} />
         </div>
       ))
     }
