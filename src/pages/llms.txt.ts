@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { buildNav } from '@/lib/nav';
+import { buildNav, flattenNav } from '@/lib/nav';
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.href.replace(/\/$/, '') ?? 'https://efatura.akira-io.com';
@@ -10,7 +10,7 @@ export const GET: APIRoute = async ({ site }) => {
 
   const sections = nav
     .map((group) => {
-      const items = group.items
+      const items = flattenNav([group])
         .map((item) => {
           const description = descriptions.get(item.id);
           return `- [${item.title}](${base}${item.href})${description ? `: ${description}` : ''}`;

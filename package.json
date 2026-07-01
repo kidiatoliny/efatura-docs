@@ -5,11 +5,10 @@
   "type": "module",
   "description": "Documentation site for @akira-io/efatura.",
   "scripts": {
-    "sync": "bun scripts/sync-docs.mjs",
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "bun scripts/sync-docs.mjs && astro build && pagefind --site dist",
-    "test": "bun scripts/test-mobile-header.mjs",
+    "build": "astro build && pagefind --site dist",
+    "test": "bun test src/lib/nav.test.ts && bun scripts/test-mobile-header.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
