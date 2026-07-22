@@ -2,6 +2,15 @@ import { describe, expect, it } from 'bun:test';
 import { buildNav } from './nav';
 
 describe('buildNav', () => {
+  it('places examples after reference', () => {
+    const nav = buildNav([
+      { id: '10-architecture', data: { title: 'Architecture', sidebar: { order: 10 } } },
+      { id: 'examples/fastify/server', data: { title: 'Fastify Server', sidebar: { order: 1 } } },
+    ]);
+
+    expect(nav.map((group) => group.label)).toEqual(['Reference', 'Examples']);
+  });
+
   it('adds nested documents to automatic sidebar groups', () => {
     const nav = buildNav([
       { id: '01-installation', data: { title: 'Installation', sidebar: { order: 1 } } },
