@@ -99,11 +99,7 @@ export function buildNav(entries: DocEntryLike[]): NavGroup[] {
       dir,
     ),
   }));
-  const referenceGroup = rootGroups.at(-1);
-
-  return [...rootGroups.slice(0, -1), ...nestedGroups, referenceGroup].filter(
-    (group): group is NavGroup => Boolean(group && group.items.length > 0),
-  );
+  return [...rootGroups, ...nestedGroups].filter((group) => group.items.length > 0);
 }
 
 export function flattenNav(groups: NavGroup[]): NavLeafItem[] {
